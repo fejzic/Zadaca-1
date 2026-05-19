@@ -1,163 +1,216 @@
-V=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bs">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Proximus CRM Demo</title>
+    <meta charset="UTF-8">
+    <title>Proximus CRM Demo</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+    <style>
 
-    body {
-      margin: 0;
-      background: #f3f5f9;
-      color: #1f2937;
-    }
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    .login-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #111827, #1d4ed8);
-    }
+        body {
+            margin: 0;
+            background: #f3f5f9;
+            color: #1f2937;
+        }
 
-    .login-card {
-      width: 380px;
-      background: white;
-      padding: 30px;
-      border-radius: 18px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-    }
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #111827, #1d4ed8);
+        }
 
-    .login-card h1 {
-      margin-top: 0;
-      font-size: 26px;
-      color: #111827;
-    }
+        .login-card {
+            width: 380px;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
 
-    .form-group {
-      margin-bottom: 16px;
-    }
+        .login-card h1 {
+            margin-top: 0;
+            font-size: 26px;
+            color: #111827;
+        }
 
-    label {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 6px;
-      color: #4b5563;
-    }
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-    input,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      outline: none;
-    }
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #4b5563;
+        }
 
-    input:focus,
-    select:focus {
-      border-color: #2563eb;
-    }
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            outline: none;
+        }
 
-    button {
-      border: none;
-      border-radius: 10px;
-      padding: 11px 16px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+        input:focus {
+            border-color: #2563eb;
+        }
 
-    .primary-btn {
-      background: #2563eb;
-      color: white;
-      width: 100%;
-    }
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-    .secondary-btn {
-      background: #e5e7eb;
-      color: #111827;
-    }
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+            width: 100%;
+        }
 
-    .danger-btn {
-      background: #dc2626;
-      color: white;
-    }
+        .error-message {
+            display: none;
+            margin-top: 14px;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
 
-    .success-btn {
-      background: #16a34a;
-      color: white;
-    }
+        .dashboard {
+            display: none;
+            padding: 40px;
+        }
 
-    .error-message {
-      display: none;
-      margin-top: 14px;
-      background: #fee2e2;
-      color: #991b1b;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-  </style>
+    </style>
 </head>
 
 <body>
 
-<section id="login-screen" class="login-screen">
+    <section id="login-screen" class="login-screen">
 
-  <div class="login-card" data-testid="login-card">
+        <div class="login-card" data-testid="login-card">
 
-    <h1>Proximus CRM</h1>
+            <h1>Proximus CRM</h1>
 
-    <p>Prijava u demo sistem za klijente</p>
+            <p>Prijava u demo sistem za klijente</p>
 
-    <div class="form-group">
-      <label for="email">Email adresa</label>
+            <div class="form-group">
 
-      <input
-        id="email"
-        name="email"
-        type="text"
-        placeholder="Unesite email"
-        data-testid="login-email"
-      />
-    </div>
+                <label for="email">Email adresa</label>
 
-    <div class="form-group">
-      <label for="password">Lozinka</label>
+                <input
+                    id="email"
+                    type="text"
+                    placeholder="Unesite email"
+                    data-testid="login-email"
+                >
 
-      <input
-        id="password"
-        name="password"
-        type="password"
-        placeholder="Unesite lozinku"
-        data-testid="login-password"
-      />
-    </div>
+            </div>
 
-    <button
-      id="login-button"
-      class="primary-btn"
-      data-testid="login-submit"
+            <div class="form-group">
+
+                <label for="password">Lozinka</label>
+
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Unesite lozinku"
+                    data-testid="login-password"
+                >
+
+            </div>
+
+            <button
+                id="login-button"
+                class="primary-btn"
+                data-testid="login-submit"
+            >
+                Prijavi se
+            </button>
+
+            <div
+                id="login-error"
+                class="error-message"
+                data-testid="login-error"
+            >
+                Neispravni podaci za prijavu.
+            </div>
+
+            <p style="font-size:13px; color:#6b7280;">
+                Demo login: admin@proximus.ba / test123
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section
+        id="dashboard"
+        class="dashboard"
     >
-      Prijavi se
-    </button>
 
-    <div
-      id="login-error"
-      class="error-message"
-      data-testid="login-error"
-    >
-      Neispravni podaci za prijavu.
-    </div>
+        <h1 data-testid="app-title">
+            Proximus CRM Dashboard
+        </h1>
 
-    <p style="font-size:13px; color:#6b7280;">
-      Demo login: admin@proximus.ba / test123
-    </p>
+    </section>
 
-  </div>
 
-</section>
+    <script>
+
+        const loginButton =
+            document.getElementById("login-button");
+
+        const loginScreen =
+            document.getElementById("login-screen");
+
+        const dashboard =
+            document.getElementById("dashboard");
+
+        const loginError =
+            document.getElementById("login-error");
+
+
+        loginButton.addEventListener("click", () => {
+
+            const email =
+                document.getElementById("email").value;
+
+            const password =
+                document.getElementById("password").value;
+
+
+            if (
+                email === "admin@proximus.ba"
+                &&
+                password === "test123"
+            ) {
+
+                loginScreen.style.display = "none";
+
+                dashboard.style.display = "block";
+
+            } else {
+
+                loginError.style.display = "block";
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

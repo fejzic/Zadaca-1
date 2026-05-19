@@ -1,0 +1,27 @@
+{
+  "name": "zadaca1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fejzic/Zadaca-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fejzic/Zadaca-1/issues"
+  },
+  "homepage": "https://github.com/fejzic/Zadaca-1#readme",
+  "dependencies": {
+    "selenium-webdriver": "^4.44.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}
