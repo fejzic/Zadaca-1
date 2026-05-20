@@ -2,18 +2,16 @@
 <html lang="bs">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proximus CRM Dashboard</title>
+  <title>Proximus CRM Demo</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
     }
 
     body {
+      margin: 0;
       background: #f3f5f9;
       color: #1f2937;
     }
@@ -35,8 +33,9 @@
     }
 
     .login-card h1 {
-      margin-bottom: 10px;
-      font-size: 28px;
+      margin-top: 0;
+      font-size: 26px;
+      color: #111827;
     }
 
     .form-group {
@@ -45,8 +44,8 @@
 
     label {
       display: block;
+      font-size: 13px;
       margin-bottom: 6px;
-      font-size: 14px;
       color: #4b5563;
     }
 
@@ -56,6 +55,12 @@
       padding: 11px;
       border: 1px solid #d1d5db;
       border-radius: 10px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2563eb;
     }
 
     button {
@@ -105,20 +110,24 @@
     .topbar {
       background: #111827;
       color: white;
-      padding: 18px 28px;
+      padding: 16px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
+    .topbar strong {
+      font-size: 20px;
+    }
+
     .layout {
       display: grid;
       grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 64px);
     }
 
     .sidebar {
       background: white;
-      min-height: calc(100vh - 72px);
       border-right: 1px solid #e5e7eb;
       padding: 22px;
     }
@@ -143,32 +152,41 @@
     }
 
     .section-title {
-      font-size: 30px;
-      margin-bottom: 24px;
+      margin-top: 0;
+      font-size: 28px;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 18px;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
 
     .stat-card {
       background: white;
-      padding: 20px;
       border-radius: 18px;
+      padding: 20px;
       box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+      position: relative;
     }
 
     .stat-card small {
       color: #6b7280;
     }
 
-    .number {
+    .stat-card .number {
       font-size: 28px;
-      font-weight: bold;
       margin-top: 8px;
+      font-weight: bold;
+    }
+
+    .stat-card[data-status="warning"] {
+      border-left: 5px solid #f59e0b;
+    }
+
+    .stat-card[data-status="success"] {
+      border-left: 5px solid #16a34a;
     }
 
     .panel {
@@ -176,33 +194,41 @@
       border-radius: 18px;
       padding: 20px;
       box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+      margin-bottom: 22px;
     }
 
     .filters {
       display: grid;
-      grid-template-columns: 1fr 200px 160px;
-      gap: 12px;
+      grid-template-columns: 1fr 220px 180px;
+      gap: 14px;
       margin-bottom: 18px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      overflow: hidden;
     }
 
     th,
     td {
-      padding: 14px;
-      border-bottom: 1px solid #e5e7eb;
       text-align: left;
+      padding: 13px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
     }
 
     th {
       background: #f9fafb;
+      color: #374151;
+    }
+
+    tr[data-client-status="inactive"] {
+      opacity: 0.6;
     }
 
     .badge {
-      padding: 6px 10px;
+      padding: 5px 9px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: bold;
@@ -218,27 +244,52 @@
       color: #991b1b;
     }
 
-    .modal {
+    .badge.vip {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .actions button {
+      margin-right: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .modal-backdrop {
+      display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
+      background: rgba(15,23,42,0.6);
       align-items: center;
       justify-content: center;
     }
 
-    .modal-content {
+    .modal {
       background: white;
-      width: 420px;
-      padding: 24px;
+      width: 480px;
       border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.3);
     }
 
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 18px;
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
   </style>
 </head>
@@ -246,297 +297,349 @@
 <body>
 
 <section id="login-screen" class="login-screen">
-
   <div class="login-card" data-testid="login-card">
 
     <h1>Proximus CRM</h1>
 
-    <p style="margin-bottom: 20px;">
-      Prijava u demo sistem za klijente
-    </p>
+    <p>Prijava u demo sistem za klijente</p>
 
     <div class="form-group">
-      <label>Email adresa</label>
-
+      <label for="email">Email adresa</label>
       <input
+        id="email"
+        name="email"
         type="text"
         placeholder="Unesite email"
         data-testid="login-email"
-        id="email"
       />
     </div>
 
     <div class="form-group">
-      <label>Lozinka</label>
-
+      <label for="password">Lozinka</label>
       <input
+        id="password"
+        name="password"
         type="password"
         placeholder="Unesite lozinku"
         data-testid="login-password"
-        id="password"
       />
     </div>
 
     <button
+      id="login-button"
       class="primary-btn"
       data-testid="login-submit"
-      id="login-button"
     >
       Prijavi se
     </button>
 
     <div
+      id="login-error"
       class="error-message"
       data-testid="login-error"
-      id="login-error"
     >
       Neispravni podaci za prijavu.
     </div>
 
   </div>
-
 </section>
 
-<section class="app" id="app">
+<section id="app" class="app">
 
-  <div class="topbar">
-    <strong data-testid="app-title">
-      Proximus CRM Dashboard
-    </strong>
-
-    <button class="secondary-btn">
-      Logout
-    </button>
-  </div>
+  <header class="topbar">
+    <strong data-testid="app-title">Proximus CRM Dashboard</strong>
+    <button id="logout-button" class="secondary-btn">Odjava</button>
+  </header>
 
   <div class="layout">
 
     <aside class="sidebar">
-
       <a href="#" class="active">Dashboard</a>
       <a href="#">Klijenti</a>
-      <a href="#">Izvještaji</a>
       <a href="#">Postavke</a>
-
     </aside>
 
     <main class="content">
 
-      <h1 class="section-title">
-        Pregled sistema
-      </h1>
+      <h1 class="section-title">Pregled klijenata</h1>
 
       <div class="stats-grid">
 
-        <div class="stat-card" data-testid="clients-card">
+        <div class="stat-card" data-status="success">
           <small>Ukupno klijenata</small>
-          <div class="number">152</div>
+          <div class="number" data-testid="clients-count">6</div>
         </div>
 
-        <div class="stat-card" data-testid="active-card">
+        <div class="stat-card" data-status="success">
           <small>Aktivni klijenti</small>
-          <div class="number">121</div>
+          <div class="number" data-testid="active-count">4</div>
         </div>
 
-        <div class="stat-card" data-testid="inactive-card">
-          <small>Neaktivni klijenti</small>
-          <div class="number">31</div>
+        <div class="stat-card" data-status="warning">
+          <small>VIP klijenti</small>
+          <div class="number" data-testid="vip-count">2</div>
         </div>
 
-        <div class="stat-card" data-testid="revenue-card">
+        <div class="stat-card" data-status="success">
           <small>Mjesečni prihod</small>
-          <div class="number">42.000 KM</div>
+          <div class="number" data-testid="revenue-total">8200</div>
         </div>
 
       </div>
 
-      <div class="panel">
+      <section class="panel" data-testid="clients-panel">
 
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-
-          <h2>Lista klijenata</h2>
-
-          <button
-            class="success-btn"
-            id="open-modal"
-            data-testid="open-add-client-modal"
-          >
-            Dodaj klijenta
-          </button>
-
-        </div>
+        <h2>Lista klijenata</h2>
 
         <div class="filters">
+          <input id="search-client" type="text" placeholder="Pretraži po nazivu klijenta..." />
 
-          <input
-            type="text"
-            placeholder="Pretraži klijente"
-            data-testid="search-input"
-          />
-
-          <select data-testid="status-filter">
+          <select id="status-filter">
             <option value="all">Svi statusi</option>
             <option value="active">Aktivni</option>
             <option value="inactive">Neaktivni</option>
           </select>
 
-          <button
-            class="secondary-btn"
-            data-testid="sort-button"
-          >
-            Sortiraj
-          </button>
-
+          <select id="sort-filter">
+            <option value="default">Bez sortiranja</option>
+            <option value="name-asc">Naziv A-Z</option>
+            <option value="revenue-desc">Prihod najveći</option>
+          </select>
         </div>
 
-        <table data-testid="clients-table">
-
+        <table id="clients-table">
           <thead>
             <tr>
-              <th>Ime</th>
-              <th>Email</th>
+              <th>Klijent</th>
+              <th>Grad</th>
               <th>Status</th>
+              <th>Tip</th>
+              <th>Prihod</th>
               <th>Akcije</th>
             </tr>
           </thead>
 
           <tbody>
 
-            <tr>
-              <td>Amar Mehić</td>
-              <td>amar@email.com</td>
-              <td>
-                <span class="badge active">
-                  Aktivan
-                </span>
-              </td>
-              <td>
-                <button
-                  class="danger-btn"
-                  data-testid="delete-client-btn"
-                >
-                  Obriši
-                </button>
-              </td>
-            </tr>
+<tr data-name="Hotel Pino">
 
-            <tr>
-              <td>Lejla Hodžić</td>
-              <td>lejla@email.com</td>
-              <td>
-                <span class="badge inactive">
-                  Neaktivan
-                </span>
-              </td>
-              <td>
-                <button class="danger-btn">
-                  Obriši
-                </button>
-              </td>
-            </tr>
+<td>Hotel Pino</td>
+<td>Sarajevo</td>
 
-          </tbody>
+<td>
+<span class="badge active">
+Aktivan
+</span>
+</td>
 
+<td>
+<span class="badge vip">
+VIP
+</span>
+</td>
+
+<td>2500 KM</td>
+
+<td class="actions">
+
+<button class="secondary-btn details-btn">
+Detalji
+</button>
+
+<button class="danger-btn delete-btn">
+Obriši
+</button>
+
+</td>
+
+</tr>
+
+
+
+<tr data-name="Casa Columba">
+
+<td>Casa Columba</td>
+<td>Split</td>
+
+<td>
+<span class="badge active">
+Aktivan
+</span>
+</td>
+
+<td>
+<span class="badge vip">
+VIP
+</span>
+</td>
+
+<td>2100 KM</td>
+
+<td class="actions">
+
+<button class="secondary-btn details-btn">
+Detalji
+</button>
+
+<button class="danger-btn delete-btn">
+Obriši
+</button>
+
+</td>
+
+</tr>
+
+
+
+<tr data-name="Urban Garden">
+
+<td>Urban Garden</td>
+<td>Makarska</td>
+
+<td>
+<span class="badge active">
+Aktivan
+</span>
+</td>
+
+<td>Standard</td>
+
+<td>1400 KM</td>
+
+<td class="actions">
+
+<button class="secondary-btn details-btn">
+Detalji
+</button>
+
+<button class="danger-btn delete-btn">
+Obriši
+</button>
+
+</td>
+
+</tr>
+
+
+
+<tr data-name="Top Gear Sarajevo">
+
+<td>Top Gear Sarajevo</td>
+<td>Sarajevo</td>
+
+<td>
+<span class="badge inactive">
+Neaktivan
+</span>
+</td>
+
+<td>Standard</td>
+
+<td>900 KM</td>
+
+<td class="actions">
+
+<button class="secondary-btn details-btn">
+Detalji
+</button>
+
+<button class="danger-btn delete-btn">
+Obriši
+</button>
+
+</td>
+
+</tr>
+
+
+
+<tr data-name="Lusso Mare">
+
+<td>Lusso Mare</td>
+<td>Istra</td>
+
+<td>
+<span class="badge active">
+Aktivan
+</span>
+</td>
+
+<td>Standard</td>
+
+<td>1100 KM</td>
+
+<td class="actions">
+
+<button class="secondary-btn details-btn">
+Detalji
+</button>
+
+<button class="danger-btn delete-btn">
+Obriši
+</button>
+
+</td>
+
+</tr>
+
+
+
+<tr data-name="Smash Room">
+
+<td>Smash Room</td>
+<td>Sarajevo</td>
+
+<td>
+<span class="badge inactive">
+Neaktivan
+</span>
+</td>
+
+<td>Standard</td>
+
+<td>200 KM</td>
+
+<td class="actions">
+
+<button class="secondary-btn details-btn">
+Detalji
+</button>
+
+<button class="danger-btn delete-btn">
+Obriši
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
         </table>
 
-      </div>
+      </section>
 
     </main>
-
   </div>
-
 </section>
 
-<div class="modal" id="client-modal" data-testid="client-modal">
-
-  <div class="modal-content">
-
-    <h2>Dodaj klijenta</h2>
-
-    <div class="form-group" style="margin-top:20px;">
-      <label>Ime klijenta</label>
-
-      <input
-        type="text"
-        data-testid="client-name-input"
-      />
-    </div>
-
-    <div class="form-group">
-      <label>Email</label>
-
-      <input
-        type="text"
-        data-testid="client-email-input"
-      />
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        class="secondary-btn"
-        id="close-modal"
-      >
-        Zatvori
-      </button>
-
-      <button
-        class="success-btn"
-        data-testid="save-client-btn"
-      >
-        Sačuvaj
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
 <script>
+const loginButton = document.getElementById('login-button');
+const loginError = document.getElementById('login-error');
+const loginScreen = document.getElementById('login-screen');
+const app = document.getElementById('app');
 
-  const loginButton = document.getElementById("login-button");
-  const loginError = document.getElementById("login-error");
-  const loginScreen = document.getElementById("login-screen");
-  const app = document.getElementById("app");
+loginButton.addEventListener('click', () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-  loginButton.addEventListener("click", () => {
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (
-      email === "admin@proximus.ba"
-      &&
-      password === "test123"
-    ) {
-
-      loginError.style.display = "none";
-
-      loginScreen.style.display = "none";
-
-      app.style.display = "block";
-
-    } else {
-
-      loginError.style.display = "block";
-    }
-  });
-
-  const modal = document.getElementById("client-modal");
-
-  document.getElementById("open-modal")
-    .addEventListener("click", () => {
-
-      modal.style.display = "flex";
-    });
-
-  document.getElementById("close-modal")
-    .addEventListener("click", () => {
-
-      modal.style.display = "none";
-    });
-
+  if (email === 'admin@proximus.ba' && password === 'test123') {
+    loginError.style.display = 'none';
+    loginScreen.style.display = 'none';
+    app.style.display = 'block';
+  } else {
+    loginError.style.display = 'block';
+  }
+});
 </script>
 
 </body>

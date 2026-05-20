@@ -48,4 +48,6 @@ describe("LogIn Test", () => {
         expect(errorMessage).toBe("Neispravni podaci za prijavu.");  
     }     
     );      
+
+    
 });
