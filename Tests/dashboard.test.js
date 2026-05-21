@@ -1,8 +1,8 @@
-const buildDriver = require("../utils/driver");
+const buildDriver = require("../utils/BasePage");
 const testData = require("../config/testData");
 
 const LoginPage = require("../POM/LoginPage");
-const environment = require("../config/environment");
+
 
 const DashboardPage = require("../POM/DashboardPage");
 
@@ -10,31 +10,26 @@ describe("Dashboard Test", () => {
     let driver;
     let loginPage;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
 
         driver = await buildDriver();
 
         loginPage = new LoginPage(driver);
+        await loginPage.logIn(testData.validUser.email, testData.validUser.password);
+
+        dashboardPage = new DashboardPage(driver);
 
     });
 
-
-    beforeEach(async () => {
-
-        await driver.get(environment.baseUrl);
-
-    });
-
-    afterAll(async () => {
+    afterEach(async () => {
 
         await driver.quit();
 
     });
 
     test("Provjera dashboard kartica", async () => {
-        await loginPage.logIn(testData.validUser.email, testData.validUser.password);
 
-        const dashboardPage = new DashboardPage(driver);
+        
         const totalClients = await dashboardPage.getTotalClients();
         const activeClients = await dashboardPage.getActiveClientsDashboardCount();
         const revenue = await dashboardPage.getRevenue();

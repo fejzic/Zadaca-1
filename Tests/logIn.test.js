@@ -1,4 +1,4 @@
-const buildDriver = require("../utils/driver");
+const buildDriver = require("../utils/BasePage");
 const testData = require("../config/testData");
 
 const LoginPage = require("../POM/LoginPage");
@@ -8,7 +8,7 @@ describe("LogIn Test", () => {
     let driver;
     let loginPage;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
 
         driver = await buildDriver();
 
@@ -17,13 +17,8 @@ describe("LogIn Test", () => {
     });
 
 
-    beforeEach(async () => {
 
-        await driver.get(environment.baseUrl);
-
-    });
-
-    afterAll(async () => {
+    afterEach(async () => {
 
         await driver.quit();
 

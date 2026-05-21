@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/fejzic/Zadaca-1#readme",
   "dependencies": {
+    "mocha": "^11.7.5",
     "selenium-webdriver": "^4.44.0"
   },
   "devDependencies": {
