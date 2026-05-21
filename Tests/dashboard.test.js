@@ -27,7 +27,7 @@ describe("Dashboard Test", () => {
 
     });
 
-    test("Provjera dashboard kartica", async () => {
+    test.only("Zadatak 3: Provjera dashboard kartica", async () => {
 
         
         const totalClients = await dashboardPage.getTotalClients();
@@ -49,21 +49,16 @@ describe("Dashboard Test", () => {
         console.log('Broj VIP klijenata:', await dashboardPage.countVipClientsFromListOfClients());
     });
 
-    test("Provjera da li tabela ima 6 redova", async () => {
+    test.only("Zadatak 4: Provjera da li tabela ima 6 redova", async () => {
         const rows = await dashboardPage.driver.findElements(dashboardPage.tableRows);
         expect(rows.length).toEqual(await dashboardPage.countTotalClinetsFromListOfClients());        
         });
 
-    test("Pronaci klijenta po data atributu", async () => {
+    test.only("Zadatak 5: Pronaci klijenta po data atributu", async () => {
         const client =
-        await dashboardPage.getClientData(
-            "Hotel Pino"
-        );
+        await dashboardPage.getClientData(testData.clientData.client);
 
-
-
-    expect(client.client)
-        .toBe(testData.clientData.client);
+    expect(client.client).toBe(testData.clientData.client);
 
     console.log(client.client);
 
@@ -84,8 +79,38 @@ describe("Dashboard Test", () => {
     console.log(client.revenue);
     });
 
-    
+    test("Zadatak 6: Pronaci klijenta po data atributu i kliknuti na dugme 'Detalji'", async () => {
+        await dashboardPage.getClientDataByAttribute(testData.clientData2.client);
 
+    });
+
+    test.only("Zadatak 7: Provjeriti da li se modalni prozor sa detaljima klijenta prikazuje i zatvoriti ga", async () => {
+        await dashboardPage.getClientDataByAttribute(testData.clientData2.client);
+
+        const modalData = await dashboardPage.getModalClientData();
+
+       expect(modalData.client).toContain(testData.clientData2.client);
+
+       console.log('Ime klijenta:', modalData.client);
+
+       expect(modalData.city).toContain(testData.clientData2.city);
+
+       console.log('Grad klijenta:', modalData.city);
+       
+       expect(modalData.revenue).toContain(testData.clientData2.revenue);
+
+       console.log('Prihod klijenta:', modalData.revenue);
+
+       
+        const isModalDisplayed = await dashboardPage.isModalDisplayed();
+        expect(isModalDisplayed).toBe(true);
+
+        await dashboardPage.closeModal();
+
+        const isModalClosed = await dashboardPage.isModalClosed();
+        expect(isModalClosed).toBe(true);           
+    
+    });
 
 });
        

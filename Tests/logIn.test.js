@@ -24,7 +24,7 @@ describe("LogIn Test", () => {
 
     });
 
-    test("Uspjesno logiranje sa validim kredencijalima", async () => {
+    test("Zadatak 1: Uspjesno logiranje sa validim kredencijalima", async () => {
         await loginPage.logIn(testData.validUser.email, testData.validUser.password);
 
         const dashboardMessage = await loginPage.getDashboardMessage();
@@ -33,7 +33,7 @@ describe("LogIn Test", () => {
         
     });     
 
-    test("Neuspjesno logiranje sa nevalidim kredencijalima", async () => {
+    test("Zadatak 2: Neuspjesno logiranje sa nevalidim kredencijalima", async () => {
         await loginPage.logIn(testData.invalidUser.email, testData.invalidUser.password);
 
         const errorMessage = await loginPage.getErrorMessage();

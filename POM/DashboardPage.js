@@ -12,6 +12,12 @@ class DashboardPage {
         this.tableRowsCells = By.xpath("//tbody/tr/td[contains(text(),'KM')]");
         this.VIPClients = By.css('[data-testid="vip-count"]');
         this.VIPClientsElements = By.css('.badge.vip');
+        this.buttonDetails = By.xpath(".//button[contains(text(),'Detalji')]");
+        this.modalContent = By.id('client-modal');
+        this.modalClientName = By.id('modal-client-name');
+        this.modalClientCity = By.id('modal-client-city');
+        this.modalClientRevenue = By.id('modal-client-revenue');
+        this.modalCloseButton = By.id('close-modal');
     }
 
 
@@ -30,7 +36,7 @@ class DashboardPage {
 
 
     async getTotalClients() {
-        const totalClientsElement = await this.driver.wait(until.elementLocated(this.totalClients), 50000);      ;
+        const totalClientsElement = await this.driver.wait(until.elementLocated(this.totalClients), 50000);;
         const totalClientsText = await totalClientsElement.getText();
 
         return parseInt(totalClientsText);
@@ -74,8 +80,6 @@ class DashboardPage {
             const revenueText =
                 await cell.getText();
 
-
-
             totalRevenue += Number(
                 revenueText.replace("KM", "").trim()
             );
@@ -92,7 +96,7 @@ class DashboardPage {
 
     async getRowCells(row) {
 
-        return await row.findElements(By.tagName("td"));  
+        return await row.findElements(By.tagName("td"));
 
     }
     async getCellText(cell) {
@@ -128,6 +132,80 @@ class DashboardPage {
 
     }
 
+    async getClientDataByAttribute(clientName) {
 
+        const rows = await this.getClientRows(clientName);
+
+        for (const clientRow of rows) {
+
+            const detailsButton = clientRow.findElement(this.buttonDetails);
+
+            await detailsButton.click();
+
+            //await this.driver.sleep(5000);
+
+        }
+    }
+
+    async isModalDisplayed() {
+
+        try {
+            const modal = await this.driver.wait(until.elementLocated(this.modalContent), 50000);
+            return await modal.isDisplayed();
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async getModalClientData() {
+
+        const modalElements = [
+
+            await this.driver.wait(until.elementLocated(this.modalClientName), 50000),
+
+            await this.driver.wait(until.elementLocated(this.modalClientCity), 50000),
+
+            await this.driver.wait(until.elementLocated(this.modalClientRevenue), 50000)
+
+        ];
+
+        const keys = [
+            "client",
+            "city",
+            "revenue"
+        ];
+
+        const modalData = {};
+
+        for (let i = 0; i < modalElements.length; i++) {
+            const text = await this.getCellText(modalElements[i]);
+
+            modalData[keys[i]] = text;
+
+        }
+
+        return modalData;
+
+    }
+
+    async closeModal() {
+
+        const closeButton = await this.driver.wait(until.elementLocated(this.modalCloseButton), 50000);
+        await closeButton.click();
+
+    }
+
+    async isModalClosed() {
+
+        const modal =
+            await this.driver.findElement(
+                this.modalContent
+            );
+
+
+
+        return !(await modal.isDisplayed());
+
+    }
 
 } module.exports = DashboardPage;
