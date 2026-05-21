@@ -32,18 +32,29 @@ describe("Dashboard Test", () => {
         
         const totalClients = await dashboardPage.getTotalClients();
         const activeClients = await dashboardPage.getActiveClientsDashboardCount();
+        const vipClients = await dashboardPage.getVipClients();
         const revenue = await dashboardPage.getRevenue();
 
         expect(totalClients).toBe(await dashboardPage.countTotalClinetsFromListOfClients());
+
         expect(activeClients).toBe(await dashboardPage.countActiveClientsFromListOfClients());
+
+        expect(vipClients).toBe(await dashboardPage.countVipClientsFromListOfClients());
+
         expect(revenue).toBe(await dashboardPage.calculateRevenueFromListOfClients());
 
         console.log('Broj ukupnog prihoda:', await dashboardPage.calculateRevenueFromListOfClients());
-
         console.log('Broj ukupnih klijenata:', await dashboardPage.countTotalClinetsFromListOfClients());
-
         console.log('Broj aktivnih klijenata:', await dashboardPage.countActiveClientsFromListOfClients());
+        console.log('Broj VIP klijenata:', await dashboardPage.countVipClientsFromListOfClients());
     });
+
+    test("Provjera da li tabela ima 6 redova", async () => {
+        const rows = await dashboardPage.driver.findElements(dashboardPage.tableRows);
+        expect(rows.length).toEqual(await dashboardPage.countTotalClinetsFromListOfClients());        
+        });
+
+    
 
 
 });

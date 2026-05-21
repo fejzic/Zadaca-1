@@ -10,6 +10,8 @@ class DashboardPage {
         this.inactiveClients = By.css('[data-testid="inactive-clients"]');
         this.revenue = By.css('[data-testid="revenue-total"]');
         this.tableRowsCells = By.xpath("//tbody/tr/td[contains(text(),'KM')]");
+        this.VIPClients = By.css('[data-testid="vip-count"]');
+        this.VIPClientsElements = By.css('.badge.vip');
     }   
 
     
@@ -39,8 +41,18 @@ class DashboardPage {
         return rows.length;
     }
 
+    async getVipClients() {
+        const vipClientsElement = await this.driver.findElement(this.VIPClients);
+        const vipClientsText = await vipClientsElement.getText();
 
-    
+        return parseInt(vipClientsText);
+    }
+
+    async countVipClientsFromListOfClients() {
+        const vipClientsElements = await this.driver.findElements(this.VIPClientsElements);
+        return vipClientsElements.length;
+    }
+
 
     async getRevenue() {
         const revenueElement = await this.driver.findElement(this.revenue);
