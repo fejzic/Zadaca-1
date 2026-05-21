@@ -54,6 +54,36 @@ describe("Dashboard Test", () => {
         expect(rows.length).toEqual(await dashboardPage.countTotalClinetsFromListOfClients());        
         });
 
+    test("Pronaci klijenta po data atributu", async () => {
+        const client =
+        await dashboardPage.getClientData(
+            "Hotel Pino"
+        );
+
+
+
+    expect(client.client)
+        .toBe(testData.clientData.client);
+
+    console.log(client.client);
+
+    expect(client.city).toBe(testData.clientData.city);
+
+    console.log(client.city);
+
+    expect(client.status).toBe(testData.clientData.status);
+
+    console.log(client.status);
+
+    expect(client.type).toBe(testData.clientData.type);
+
+    console.log(client.type);
+
+    expect(client.revenue).toBe(testData.clientData.revenue);
+
+    console.log(client.revenue);
+    });
+
     
 
 
