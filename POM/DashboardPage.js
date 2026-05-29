@@ -3,7 +3,7 @@ const { By, until } = require('selenium-webdriver');
 class DashboardPage {
     constructor(driver) {
         this.driver = driver;
-        this.budgeActiveElements = By.className('badge active');
+        this.budgeActiveElements = By.css('.badge.active');
         this.tableRows = By.css("#clients-table tbody tr");
         this.totalClients = By.css('[data-testid="clients-count"]');
         this.activeClients = By.css('[data-testid="active-count"]');

@@ -79,7 +79,7 @@ describe("Dashboard Test", () => {
     console.log(client.revenue);
     });
 
-    test("Zadatak 6: Pronaci klijenta po data atributu i kliknuti na dugme 'Detalji'", async () => {
+    test.only("Zadatak 6: Pronaci klijenta po data atributu i kliknuti na dugme 'Detalji'", async () => {
         await dashboardPage.getClientDataByAttribute(testData.clientData2.client);
 
     });
